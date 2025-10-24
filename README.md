@@ -1,14 +1,15 @@
 # 📌 SQL
 
-**SQL** (Structured Query Language) is a standard language for managing and manipulating relational databases. It allows QA engineers to retrieve test data, validate changes after actions in the application, and ensure data consistency after different operations — making it a critical tool in manual and automated testing.
+**SQL** (Structured Query Language) — это стандартный язык для работы с реляционными базами данных.
+Он позволяет QA-инженерам получать тестовые данные, проверять изменения после действий в приложении и убеждаться в корректности данных после разных операций — что делает SQL важнейшим инструментом в ручном и автоматизированном тестировании.
 
-### 📚 Database Tables Description
+### 📚 Описание таблиц базы данных
 
-#### This project works with two main tables in a [Hogwarts-themed database](https://drive.google.com/drive/u/3/folders/1MC0AttnmlAmugifFlX3hG6pssYZDqpPB):
+#### В этом проекте используются две основные таблицы из [Hogwarts-themed database](https://drive.google.com/drive/u/3/folders/1MC0AttnmlAmugifFlX3hG6pssYZDqpPB):
 
 ### Table: `characters`
 
-Stores information about characters, including their names, ages, faculty affiliation, patronus, and unique ID.
+Содержит информацию о персонажах — их имена, возраст, принадлежность к факультету, патронус и уникальный ID.
 
 | id | first\_name | last\_name | age | faculty    | patronus             | wand\_id |
 | -- | ----------- | ---------- | --- | ---------- | -------------------- | -------- |
@@ -28,7 +29,7 @@ Stores information about characters, including their names, ages, faculty affili
 
 ### Table: `library`
 
-Contains records of books taken by characters, including the issue date, return date, and shelf location.
+Содержит данные о книгах, которые брали персонажи: дата выдачи, дата возврата и номер полки.
 
 | id | character\_id | title                                      | issue\_date | return\_date | shelf\_id |
 | -- | ------------- | ------------------------------------------ | ----------- | ------------ | --------- |
@@ -46,75 +47,75 @@ Contains records of books taken by characters, including the issue date, return 
 | 12 | 12            | Magical Water Plants Of The Highland Rocks | 2010-11-20  | 2020-10-20   | 10        |
 | 13 | 5             | Fantastic Beasts And Where To Find Them    | 2006-06-20  | 2010-00-20   | 6         |
 
-## Basic Queries
+## Основные запросы
 
 ```sql
-SELECT * FROM characters;                                   -- Select all data from the characters table
-SELECT first_name, last_name FROM characters;               -- Select only specific columns
-SELECT DISTINCT faculty FROM characters;                    -- Get unique values
+SELECT * FROM characters;                                   -- Выбрать все данные из таблицы characters
+SELECT first_name, last_name FROM characters;               -- Выбрать только определённые столбцы
+SELECT DISTINCT faculty FROM characters;                    -- Получить уникальные значения
 
-SELECT first_name AS "Half-Blood Prince"                    -- Alias example
+SELECT first_name AS "Half-Blood Prince"                    -- Пример псевдонима (alias)
 FROM characters WHERE id = 7; 
 ```
 
-## Filtering and Sorting
+## Фильтрация и сортировка
 
 ```sql
-SELECT * FROM characters WHERE age > 30;                    -- Filter characters older than 30
-SELECT * FROM characters WHERE last_name LIKE '%a%';        -- Last names that contain 'a'
-SELECT * FROM characters ORDER BY age DESC;                 -- Sort characters by age (descending)
+SELECT * FROM characters WHERE age > 30;                    -- Фильтр по возрасту (старше 30)
+SELECT * FROM characters WHERE last_name LIKE '%a%';        -- Фамилии, содержащие букву "a"
+SELECT * FROM characters ORDER BY age DESC;                 -- Сортировка по возрасту (по убыванию)
 
 SELECT * FROM characters
-WHERE first_name LIKE 'H%' AND LENGTH(first_name) = 5       -- Name starts with H and is 5 letters long
-   OR first_name LIKE 'L%';                                 -- OR starts with L
+WHERE first_name LIKE 'H%' AND LENGTH(first_name) = 5       -- Имя начинается с H и состоит из 5 букв
+   OR first_name LIKE 'L%';                                 -- Или начинается с L
 
-SELECT * FROM characters                                    -- Characters aged between 50–100
+SELECT * FROM characters                                    -- Персонажи в возрасте от 50 до 100 лет
 WHERE age BETWEEN 50 AND 100; 
 
-SELECT * FROM characters                                    -- IN operator
+SELECT * FROM characters                                    -- Пример использования оператора IN
 WHERE last_name IN ('Crabbe', 'Granger', 'Diggory'); 
 ```
 
-## Aggregations and Grouping
+## Агрегация и группировка
 
 ```sql
-SELECT COUNT(*) FROM characters;                            -- Count all characters
-SELECT AVG(age) FROM characters;                            -- Average age
-SELECT faculty, COUNT(*) FROM characters GROUP BY faculty;  -- Count per faculty
+SELECT COUNT(*) FROM characters;                            -- Подсчитать количество персонажей
+SELECT AVG(age) FROM characters;                            -- Средний возраст
+SELECT faculty, COUNT(*) FROM characters GROUP BY faculty;  -- Количество персонажей по факультетам
 
-SELECT faculty, COUNT(*) FROM characters                    -- Filter groups using HAVING
+SELECT faculty, COUNT(*) FROM characters                    -- Использование HAVING для фильтрации групп
 GROUP BY faculty HAVING COUNT(*) > 1;                       
-```                                                        
+```
 
-## Data Definition and Control
+## Определение и управление данными
 
 ```sql
-CREATE TABLE wizards (                                      -- Create new table
+CREATE TABLE wizards (                                      -- Создать новую таблицу
   id INT PRIMARY KEY,
   name VARCHAR(50),
   house VARCHAR(20)
 );                                                          
 
-ALTER TABLE characters ADD birthday DATE;                   -- Add new column
-ALTER TABLE characters DROP COLUMN birthday;                -- Remove column
-DROP TABLE wizards;                                         -- Drop entire table
+ALTER TABLE characters ADD birthday DATE;                   -- Добавить новый столбец
+ALTER TABLE characters DROP COLUMN birthday;                -- Удалить столбец
+DROP TABLE wizards;                                         -- Удалить таблицу целиком
 ```
 
-## Modifying Data
+## Изменение данных
 
 ```sql
-DELETE FROM characters WHERE id = 11;                       -- Delete character with ID 11
-UPDATE characters SET age = age + 1 WHERE age IS NOT NULL;  -- Increase age by 1
+DELETE FROM characters WHERE id = 11;                       -- Удалить персонажа с ID 11
+UPDATE characters SET age = age + 1 WHERE age IS NOT NULL;  -- Увеличить возраст на 1
 ```
 
-## Joins and Relationships
+## Объединение таблиц
 
 ```sql
-SELECT c.first_name, l.title                                -- Join characters with library books
+SELECT c.first_name, l.title                                -- Объединить таблицы characters и library
 FROM characters c
 JOIN library l ON c.id = l.character_id;                    
 ```
 
-##  Bonus
+## 🎁 Бонус
 
-You can also check out some great [SQL Cheat Sheets](https://www.sqltutorial.org/wp-content/uploads/2016/04/SQL-cheat-sheet.pdf)
+Рекомендую ознакомиться с отличной [SQL шпаргалкой](https://www.sqltutorial.org/wp-content/uploads/2016/04/SQL-cheat-sheet.pdf) — пригодится и в ручном, и в автоматизированном тестировании.
